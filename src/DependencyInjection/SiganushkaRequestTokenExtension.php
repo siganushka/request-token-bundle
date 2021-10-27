@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace Siganushka\RequestTokenBundle\DependencyInjection;
 
 use Siganushka\RequestTokenBundle\EventSubscriber\AddRequestTokenSubscriber;
+use Siganushka\RequestTokenBundle\EventSubscriber\AddResponseTokenSubscriber;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class SiganushkaRequestTokenExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        // $loader = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
-        // $loader->load('services.xml');
+        $loader = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
+        $loader->load('services.xml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -26,25 +25,21 @@ class SiganushkaRequestTokenExtension extends Extension
         $requestHeader = $config['request_header'] ?? [];
         $responseHeader = $config['response_header'] ?? [];
 
-        $definition = new Definition(AddRequestTokenSubscriber::class);
         if ($requestHeader['enabled']) {
-            $definition->addTag('kernel.event_listener', [
-                'event' => RequestEvent::class,
-                'method' => 'onKernelRequest',
-                'priority' => 128,
-            ]);
+            $container->register('siganushka_request_token.request_token_subscriber', AddRequestTokenSubscriber::class)
+                ->setArgument(0, new Reference($config['token_generator']))
+                ->setArgument(1, $requestHeader['name'])
+                ->setPublic(true)
+                ->addTag('kernel.event_subscriber')
+            ;
         }
 
-        if ($responseHeader['enabled']) {
-            $definition->addTag('kernel.event_listener', [
-                'event' => ResponseEvent::class,
-                'method' => 'onKernelResponse',
-                'priority' => -128,
-            ]);
-        }
-
-        if ($definition->getTags()) {
-            $container->setDefinition(AddRequestTokenSubscriber::class, $definition);
+        if ($requestHeader['enabled'] && $responseHeader['enabled']) {
+            $container->register('siganushka_request_token.response_token_subscriber', AddResponseTokenSubscriber::class)
+                ->setArgument(0, $requestHeader['name'])
+                ->setArgument(1, $responseHeader['name'])
+                ->addTag('kernel.event_subscriber')
+            ;
         }
     }
 }

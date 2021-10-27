@@ -4,6 +4,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-
+        <service id="siganushka_request_token.token_generator" class="Siganushka\RequestTokenBundle\RequestTokenGenerator" public="true" />
     </services>
 </container>

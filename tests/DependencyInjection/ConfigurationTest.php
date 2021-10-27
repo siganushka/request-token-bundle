@@ -34,13 +34,14 @@ final class ConfigurationTest extends TestCase
         $config = $this->processor->processConfiguration($this->configuration, []);
 
         static::assertEquals($config, [
+            'token_generator' => 'siganushka_request_token.token_generator',
             'request_header' => [
                 'enabled' => false,
-                'name' => Configuration::HEADER_NAME,
+                'name' => 'X-Request-Id',
             ],
             'response_header' => [
                 'enabled' => false,
-                'name' => Configuration::HEADER_NAME,
+                'name' => 'X-Request-Id',
             ],
         ]);
     }
@@ -55,13 +56,14 @@ final class ConfigurationTest extends TestCase
         ]);
 
         static::assertEquals($config, [
+            'token_generator' => 'siganushka_request_token.token_generator',
             'request_header' => [
                 'enabled' => true,
-                'name' => Configuration::HEADER_NAME,
+                'name' => 'X-Request-Id',
             ],
             'response_header' => [
                 'enabled' => true,
-                'name' => Configuration::HEADER_NAME,
+                'name' => 'X-Request-Id',
             ],
         ]);
     }
@@ -70,6 +72,7 @@ final class ConfigurationTest extends TestCase
     {
         $config = $this->processor->processConfiguration($this->configuration, [
             [
+                'token_generator' => FooTokenGenerator::class,
                 'request_header' => [
                     'name' => 'foo',
                 ],
@@ -80,6 +83,7 @@ final class ConfigurationTest extends TestCase
         ]);
 
         static::assertEquals($config, [
+            'token_generator' => FooTokenGenerator::class,
             'request_header' => [
                 'enabled' => true,
                 'name' => 'foo',
@@ -118,4 +122,8 @@ final class ConfigurationTest extends TestCase
             ],
         ]);
     }
+}
+
+class FooTokenGenerator
+{
 }

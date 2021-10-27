@@ -2,25 +2,19 @@
 
 namespace Siganushka\RequestTokenBundle\EventSubscriber;
 
-use Siganushka\RequestTokenBundle\DependencyInjection\Configuration;
 use Siganushka\RequestTokenBundle\RequestTokenGeneratorInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
-class AddRequestTokenSubscriber
+class AddRequestTokenSubscriber implements EventSubscriberInterface
 {
-    protected $requestTokenGenerator;
+    protected $tokenGenerator;
     protected $requestHeader;
-    protected $responseHeader;
 
-    public function __construct(
-        RequestTokenGeneratorInterface $requestTokenGenerator,
-        string $requestHeader = Configuration::HEADER_NAME,
-        string $responseHeader = Configuration::HEADER_NAME)
+    public function __construct(RequestTokenGeneratorInterface $tokenGenerator, string $requestHeader)
     {
-        $this->requestTokenGenerator = $requestTokenGenerator;
+        $this->tokenGenerator = $tokenGenerator;
         $this->requestHeader = $requestHeader;
-        $this->responseHeader = $responseHeader;
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -31,19 +25,14 @@ class AddRequestTokenSubscriber
 
         $request = $event->getRequest();
         if (!$request->headers->has($this->requestHeader)) {
-            $request->headers->set($this->requestHeader, $this->requestTokenGenerator->generate());
+            $request->headers->set($this->requestHeader, $this->tokenGenerator->generate());
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event)
+    public static function getSubscribedEvents()
     {
-        if (!$event->isMainRequest()) {
-            return;
-        }
-
-        $request = $event->getRequest();
-        if ($token = $request->headers->get($this->requestHeader)) {
-            $event->getResponse()->headers->set($this->responseHeader, $token);
-        }
+        return [
+            RequestEvent::class => ['onKernelRequest', 128],
+        ];
     }
 }
