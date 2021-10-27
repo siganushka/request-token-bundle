@@ -16,6 +16,7 @@ $ composer require siganushka/request-token-bundle
 # ./config/packages/siganushka_request_token.yaml
 
 siganushka_request_token:
+    token_generator: Siganushka\RequestTokenBundle\RequestTokenGenerator
     request_header:
         enabled: true
         name: 'X-Request-Id'
