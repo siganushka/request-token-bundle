@@ -77,7 +77,6 @@ final class ConfigurationTest extends TestCase
     public function testInvalidHeaderNameException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/siganushka_request_token.header_name/');
 
         $this->processor->processConfiguration($this->configuration, [
             [
@@ -89,7 +88,6 @@ final class ConfigurationTest extends TestCase
     public function testInvalidTokenGeneratorException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/siganushka_request_token.token_generator/');
 
         $this->processor->processConfiguration($this->configuration, [
             [
