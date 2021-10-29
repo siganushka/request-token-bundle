@@ -1,5 +1,10 @@
 # Request token bundle for symfony
 
+[![Build Status](https://travis-ci.org/siganushka/request-token-bundle.svg?branch=main)](https://travis-ci.org/siganushka/request-token-bundle)
+[![Latest Stable Version](https://poser.pugx.org/siganushka/request-token-bundle/v/stable)](https://packagist.org/packages/siganushka/request-token-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/siganushka/request-token-bundle/v/unstable)](https://packagist.org/packages/siganushka/request-token-bundle)
+[![License](https://poser.pugx.org/siganushka/request-token-bundle/license)](https://packagist.org/packages/siganushka/request-token-bundle)
+
 Add `X-Request-Id` for request/response headers.
 
 see: [What is the X-REQUEST-ID http header](https://stackoverflow.com/questions/25433258/what-is-the-x-request-id-http-header)
