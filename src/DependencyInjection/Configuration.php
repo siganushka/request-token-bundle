@@ -28,8 +28,12 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue('siganushka_request_token.generator.random_bytes')
                     ->validate()
-                    ->ifTrue(function ($class) {
-                        return !(new \ReflectionClass($class))->implementsInterface(RequestTokenGeneratorInterface::class);
+                    ->ifTrue(function ($tokenGeneratorService) {
+                        if (!class_exists($tokenGeneratorService)) {
+                            return false;
+                        }
+
+                        return !(new \ReflectionClass($tokenGeneratorService))->implementsInterface(RequestTokenGeneratorInterface::class);
                     })
                     ->thenInvalid('The %s class must implement '.RequestTokenGeneratorInterface::class.' for using the "token_generator".')
                 ->end()
