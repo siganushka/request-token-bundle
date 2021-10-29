@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Siganushka\RequestTokenBundle\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Siganushka\RequestTokenBundle\DependencyInjection\Configuration;
+use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -34,15 +37,9 @@ final class ConfigurationTest extends TestCase
         $config = $this->processor->processConfiguration($this->configuration, []);
 
         static::assertEquals($config, [
-            'token_generator' => 'siganushka_request_token.token_generator',
-            'request_header' => [
-                'enabled' => false,
-                'name' => 'X-Request-Id',
-            ],
-            'response_header' => [
-                'enabled' => false,
-                'name' => 'X-Request-Id',
-            ],
+            'enabled' => false,
+            'header_name' => 'X-Request-Id',
+            'token_generator' => 'siganushka_request_token.generator.random_bytes',
         ]);
     }
 
@@ -50,21 +47,14 @@ final class ConfigurationTest extends TestCase
     {
         $config = $this->processor->processConfiguration($this->configuration, [
             [
-                'request_header' => true,
-                'response_header' => true,
+                'enabled' => true,
             ],
         ]);
 
         static::assertEquals($config, [
-            'token_generator' => 'siganushka_request_token.token_generator',
-            'request_header' => [
-                'enabled' => true,
-                'name' => 'X-Request-Id',
-            ],
-            'response_header' => [
-                'enabled' => true,
-                'name' => 'X-Request-Id',
-            ],
+            'enabled' => true,
+            'header_name' => 'X-Request-Id',
+            'token_generator' => 'siganushka_request_token.generator.random_bytes',
         ]);
     }
 
@@ -72,58 +62,51 @@ final class ConfigurationTest extends TestCase
     {
         $config = $this->processor->processConfiguration($this->configuration, [
             [
-                'token_generator' => FooTokenGenerator::class,
-                'request_header' => [
-                    'name' => 'foo',
-                ],
-                'response_header' => [
-                    'name' => 'bar',
-                ],
+                'header_name' => 'foo',
+                'token_generator' => FooBarGenerator::class,
             ],
         ]);
 
         static::assertEquals($config, [
-            'token_generator' => FooTokenGenerator::class,
-            'request_header' => [
-                'enabled' => true,
-                'name' => 'foo',
-            ],
-            'response_header' => [
-                'enabled' => true,
-                'name' => 'bar',
+            'enabled' => false,
+            'header_name' => 'foo',
+            'token_generator' => FooBarGenerator::class,
+        ]);
+    }
+
+    public function testInvalidHeaderNameException(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessageMatches('/siganushka_request_token.header_name/');
+
+        $this->processor->processConfiguration($this->configuration, [
+            [
+                'header_name' => null,
             ],
         ]);
     }
 
-    public function testInvalidEnabledException(): void
+    public function testInvalidTokenGeneratorException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessageMatches('/siganushka_request_token.token_generator/');
 
         $this->processor->processConfiguration($this->configuration, [
             [
-                'request_header' => 1,
-                'response_header' => 1,
-            ],
-        ]);
-    }
-
-    public function testInvalidNameException(): void
-    {
-        $this->expectException(InvalidConfigurationException::class);
-
-        $this->processor->processConfiguration($this->configuration, [
-            [
-                'request_header' => [
-                    'name' => [],
-                ],
-                'response_header' => [
-                    'name' => [],
-                ],
+                'token_generator' => FooGenerator::class,
             ],
         ]);
     }
 }
 
-class FooTokenGenerator
+class FooGenerator
 {
+}
+
+class FooBarGenerator implements RequestTokenGeneratorInterface
+{
+    public function generate(): string
+    {
+        return 'foo_bar';
+    }
 }

@@ -10,7 +10,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Siganushka RequestTrackerBundle Test Suite">
+        <testsuite name="Siganushka RequestTokenBundle Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

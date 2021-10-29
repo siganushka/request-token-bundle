@@ -2,7 +2,7 @@
 
 Add `X-Request-Id` for request/response headers.
 
-see: [What is the X-REQUEST-ID http header][1]
+see: [What is the X-REQUEST-ID http header](https://stackoverflow.com/questions/25433258/what-is-the-x-request-id-http-header)
 
 ### Installation
 
@@ -16,14 +16,7 @@ $ composer require siganushka/request-token-bundle
 # ./config/packages/siganushka_request_token.yaml
 
 siganushka_request_token:
-    token_generator: Siganushka\RequestTokenBundle\RequestTokenGenerator
-    request_header:
-        enabled: true
-        name: 'X-Request-Id'
-    response_header:
-        enabled: true
-        name: 'X-Request-Id'
-
+    enabled: true
+    header_name: X-Request-Id
+    token_generator: siganushka_request_token.generator.random_bytes
 ```
-
-  [1]: https://stackoverflow.com/questions/25433258/what-is-the-x-request-id-http-header

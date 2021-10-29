@@ -1,6 +1,8 @@
 <?php
 
-namespace Siganushka\RequestTokenBundle;
+declare(strict_types=1);
+
+namespace Siganushka\RequestTokenBundle\Generator;
 
 interface RequestTokenGeneratorInterface
 {
