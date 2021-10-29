@@ -21,11 +21,7 @@ class RequestTokenProcessor
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        if (null === $request) {
-            throw new \LogicException('Request should exist so it can be processed for error.');
-        }
-
-        if ($request->headers->has($this->headerName)) {
+        if ($request && $request->headers->has($this->headerName)) {
             $record['extra'][$this->headerName] = $request->headers->get($this->headerName);
         }
 
