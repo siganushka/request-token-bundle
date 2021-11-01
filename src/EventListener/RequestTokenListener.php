@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
-class AddRequestTokenListener implements EventSubscriberInterface
+class RequestTokenListener implements EventSubscriberInterface
 {
     protected $tokenGenerator;
     protected $headerName;
@@ -21,7 +21,7 @@ class AddRequestTokenListener implements EventSubscriberInterface
         $this->headerName = $headerName;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onRequest(RequestEvent $event)
     {
         if (!$this->isMainRequest($event)) {
             return;
@@ -33,7 +33,7 @@ class AddRequestTokenListener implements EventSubscriberInterface
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event)
+    public function onResponse(ResponseEvent $event)
     {
         if (!$this->isMainRequest($event)) {
             return;
@@ -48,8 +48,8 @@ class AddRequestTokenListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            RequestEvent::class => ['onKernelRequest', 2049],
-            ResponseEvent::class => ['onKernelResponse', 2049],
+            RequestEvent::class => ['onRequest', 4096],
+            ResponseEvent::class => ['onResponse', 4096],
         ];
     }
 

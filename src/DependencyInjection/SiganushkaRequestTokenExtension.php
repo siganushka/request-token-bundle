@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Siganushka\RequestTokenBundle\DependencyInjection;
 
-use Siganushka\RequestTokenBundle\EventListener\AddRequestTokenListener;
+use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RandomBytesTokenGenerator;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Siganushka\RequestTokenBundle\Generator\TimestampTokenGenerator;
@@ -37,7 +37,7 @@ class SiganushkaRequestTokenExtension extends Extension
                 $container->setAlias($className, $fullAlias);
             }
 
-            $container->register('siganushka_request_token.request_token_listener', AddRequestTokenListener::class)
+            $container->register('siganushka_request_token.request_token_listener', RequestTokenListener::class)
                 ->setArgument(0, new Reference($config['token_generator']))
                 ->setArgument(1, $config['header_name'])
                 ->addTag('kernel.event_subscriber')

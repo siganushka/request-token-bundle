@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Siganushka\RequestTokenBundle\EventListener;
+namespace Siganushka\RequestTokenBundle\Tests\EventListener;
 
 use PHPUnit\Framework\TestCase;
+use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,9 +13,9 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class AddRequestTokenListenerTest extends TestCase
+class RequestTokenListenerTest extends TestCase
 {
-    public function testAddRequestToken()
+    public function testRequestToken()
     {
         $headerName = 'bar';
 
@@ -37,9 +38,9 @@ class AddRequestTokenListenerTest extends TestCase
             ->willReturn('789')
         ;
 
-        $listener = new AddRequestTokenListener($tokenGenerator, $headerName);
-        $listener->onKernelRequest($requestEvent);
-        $listener->onKernelResponse($responseEvent);
+        $listener = new RequestTokenListener($tokenGenerator, $headerName);
+        $listener->onRequest($requestEvent);
+        $listener->onResponse($responseEvent);
 
         static::assertTrue($request->headers->has($headerName));
         static::assertSame('123', $request->headers->get($headerName));
@@ -47,8 +48,8 @@ class AddRequestTokenListenerTest extends TestCase
         static::assertSame('123', $response->headers->get($headerName));
 
         $request->headers->remove($headerName);
-        $listener->onKernelRequest($requestEvent);
-        $listener->onKernelResponse($responseEvent);
+        $listener->onRequest($requestEvent);
+        $listener->onResponse($responseEvent);
 
         static::assertTrue($request->headers->has($headerName));
         static::assertSame('789', $request->headers->get($headerName));
