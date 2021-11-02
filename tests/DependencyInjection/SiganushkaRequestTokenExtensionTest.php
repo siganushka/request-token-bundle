@@ -21,11 +21,13 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         $container->loadFromExtension('siganushka_request_token');
         $container->compile();
 
-        static::assertFalse($container->hasAlias(RequestTokenGeneratorInterface::class));
         static::assertFalse($container->hasAlias(RandomBytesTokenGenerator::class));
         static::assertFalse($container->hasAlias(TimestampTokenGenerator::class));
         static::assertFalse($container->hasAlias(UuidTokenGenerator::class));
         static::assertFalse($container->hasAlias(UuidTokenGenerator::class));
+        static::assertFalse($container->hasAlias(RequestTokenGeneratorInterface::class));
+        static::assertFalse($container->hasAlias('siganushka_request_token.generator'));
+
         static::assertFalse($container->hasDefinition('siganushka_request_token.generator.random_bytes'));
         static::assertFalse($container->hasDefinition('siganushka_request_token.generator.timestamp'));
         static::assertFalse($container->hasDefinition('siganushka_request_token.generator.uniqid'));
@@ -46,21 +48,22 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         $container->loadFromExtension('siganushka_request_token', $configs);
         $container->compile();
 
-        static::assertTrue($container->hasAlias(RequestTokenGeneratorInterface::class));
         static::assertTrue($container->hasAlias(RandomBytesTokenGenerator::class));
         static::assertTrue($container->hasAlias(TimestampTokenGenerator::class));
         static::assertTrue($container->hasAlias(UuidTokenGenerator::class));
         static::assertTrue($container->hasAlias(UuidTokenGenerator::class));
+        static::assertTrue($container->hasAlias(RequestTokenGeneratorInterface::class));
+        static::assertTrue($container->hasAlias('siganushka_request_token.generator'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.random_bytes'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.timestamp'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.uniqid'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.uuid'));
-        static::assertTrue($container->hasDefinition('siganushka_request_token.request_token_listener'));
+        static::assertTrue($container->hasDefinition('siganushka_request_token.listener.request_token'));
 
-        $listenerDef = $container->getDefinition('siganushka_request_token.request_token_listener');
+        $listenerDef = $container->getDefinition('siganushka_request_token.listener.request_token');
         static::assertSame($configs['token_generator'], (string) $listenerDef->getArgument(0));
         static::assertSame($configs['header_name'], (string) $listenerDef->getArgument(1));
-        static::assertSame(class_exists(MonologBundle::class), $container->hasDefinition('siganushka_request_token.request_token_processor'));
+        static::assertSame(class_exists(MonologBundle::class), $container->hasDefinition('siganushka_request_token.monolog.processor.request_token'));
     }
 
     protected function createContainer(): ContainerBuilder

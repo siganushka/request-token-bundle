@@ -24,8 +24,6 @@ class SiganushkaRequestTokenExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         if ($config['enabled']) {
-            $container->setAlias(RequestTokenGeneratorInterface::class, $config['token_generator']);
-
             foreach ([
                 'random_bytes' => RandomBytesTokenGenerator::class,
                 'timestamp' => TimestampTokenGenerator::class,
@@ -37,14 +35,17 @@ class SiganushkaRequestTokenExtension extends Extension
                 $container->setAlias($className, $fullAlias);
             }
 
-            $container->register('siganushka_request_token.request_token_listener', RequestTokenListener::class)
+            $container->setAlias(RequestTokenGeneratorInterface::class, $config['token_generator']);
+            $container->setAlias('siganushka_request_token.generator', $config['token_generator']);
+
+            $container->register('siganushka_request_token.listener.request_token', RequestTokenListener::class)
                 ->setArgument(0, new Reference($config['token_generator']))
                 ->setArgument(1, $config['header_name'])
                 ->addTag('kernel.event_subscriber')
             ;
 
             if (class_exists(MonologBundle::class)) {
-                $container->register('siganushka_request_token.request_token_processor', RequestTokenProcessor::class)
+                $container->register('siganushka_request_token.monolog.processor.request_token', RequestTokenProcessor::class)
                     ->setArgument(0, new Reference('request_stack'))
                     ->setArgument(1, $config['header_name'])
                     ->addTag('monolog.processor')
