@@ -15,11 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SiganushkaRequestTokenExtensionTest extends TestCase
 {
-    public function testDefaultConfig(): void
+    public function testLoadDefaultConfig(): void
     {
-        $container = $this->createContainer();
-        $container->loadFromExtension('siganushka_request_token');
-        $container->compile();
+        $container = $this->createContainerWithConfigs([]);
 
         static::assertFalse($container->hasAlias(RandomBytesTokenGenerator::class));
         static::assertFalse($container->hasAlias(TimestampTokenGenerator::class));
@@ -32,21 +30,19 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         static::assertFalse($container->hasDefinition('siganushka_request_token.generator.timestamp'));
         static::assertFalse($container->hasDefinition('siganushka_request_token.generator.uniqid'));
         static::assertFalse($container->hasDefinition('siganushka_request_token.generator.uuid'));
-        static::assertFalse($container->hasDefinition('siganushka_request_token.request_token_listener'));
-        static::assertFalse($container->hasDefinition('siganushka_request_token.request_token_processor'));
+        static::assertFalse($container->hasDefinition('siganushka_request_token.listener.request_token'));
+        static::assertFalse($container->hasDefinition('siganushka_request_token.monolog.processor.request_token'));
     }
 
-    public function testWithConfigs(): void
+    public function testLoadCustomConfig(): void
     {
-        $configs = [
+        $config = [
             'enabled' => true,
             'header_name' => 'asdf',
             'token_generator' => FooBarBazGenerator::class,
         ];
 
-        $container = $this->createContainer();
-        $container->loadFromExtension('siganushka_request_token', $configs);
-        $container->compile();
+        $container = $this->createContainerWithConfigs([$config]);
 
         static::assertTrue($container->hasAlias(RandomBytesTokenGenerator::class));
         static::assertTrue($container->hasAlias(TimestampTokenGenerator::class));
@@ -54,25 +50,33 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         static::assertTrue($container->hasAlias(UuidTokenGenerator::class));
         static::assertTrue($container->hasAlias(RequestTokenGeneratorInterface::class));
         static::assertTrue($container->hasAlias('siganushka_request_token.generator'));
+
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.random_bytes'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.timestamp'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.uniqid'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.uuid'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.listener.request_token'));
-
-        $listenerDef = $container->getDefinition('siganushka_request_token.listener.request_token');
-        static::assertSame($configs['token_generator'], (string) $listenerDef->getArgument(0));
-        static::assertSame($configs['header_name'], (string) $listenerDef->getArgument(1));
         static::assertSame(class_exists(MonologBundle::class), $container->hasDefinition('siganushka_request_token.monolog.processor.request_token'));
+
+        $requestTokenListenerDef = $container->getDefinition('siganushka_request_token.listener.request_token');
+        static::assertTrue($requestTokenListenerDef->hasTag('kernel.event_subscriber'));
+        static::assertSame($config['token_generator'], (string) $requestTokenListenerDef->getArgument(0));
+        static::assertSame($config['header_name'], $requestTokenListenerDef->getArgument(1));
+
+        if (class_exists(MonologBundle::class)) {
+            $requestTokenProcessorDef = $container->getDefinition('siganushka_request_token.monolog.processor.request_token');
+            static::assertTrue($requestTokenProcessorDef->hasTag('monolog.processor'));
+            static::assertSame('request_stack', (string) $requestTokenProcessorDef->getArgument(0));
+            static::assertSame($config['header_name'], $requestTokenProcessorDef->getArgument(1));
+        }
     }
 
-    protected function createContainer(): ContainerBuilder
+    protected function createContainerWithConfigs(array $configs): ContainerBuilder
     {
         $container = new ContainerBuilder();
-        $container->registerExtension(new SiganushkaRequestTokenExtension());
 
-        $container->getCompilerPassConfig()->setRemovingPasses([]);
-        $container->getCompilerPassConfig()->setAfterRemovingPasses([]);
+        $extension = new SiganushkaRequestTokenExtension();
+        $extension->load($configs, $container);
 
         return $container;
     }
