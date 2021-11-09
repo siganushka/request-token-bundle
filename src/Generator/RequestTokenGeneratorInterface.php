@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Siganushka\RequestTokenBundle\Generator;
 
+/**
+ * Request token generator interface.
+ */
 interface RequestTokenGeneratorInterface
 {
     /**

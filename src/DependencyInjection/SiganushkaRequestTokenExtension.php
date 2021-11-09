@@ -24,16 +24,10 @@ class SiganushkaRequestTokenExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         if ($config['enabled']) {
-            foreach ([
-                'random_bytes' => RandomBytesTokenGenerator::class,
-                'timestamp' => TimestampTokenGenerator::class,
-                'uniqid' => UniqidTokenGenerator::class,
-                'uuid' => UuidTokenGenerator::class,
-            ] as $alias => $className) {
-                $fullAlias = sprintf('siganushka_request_token.generator.%s', $alias);
-                $container->register($fullAlias, $className);
-                $container->setAlias($className, $fullAlias);
-            }
+            $container->register('siganushka_request_token.generator.random_bytes', RandomBytesTokenGenerator::class);
+            $container->register('siganushka_request_token.generator.timestamp', TimestampTokenGenerator::class);
+            $container->register('siganushka_request_token.generator.uniqid', UniqidTokenGenerator::class);
+            $container->register('siganushka_request_token.generator.uuid', UuidTokenGenerator::class);
 
             $container->setAlias(RequestTokenGeneratorInterface::class, $config['token_generator']);
             $container->setAlias('siganushka_request_token.generator', $config['token_generator']);

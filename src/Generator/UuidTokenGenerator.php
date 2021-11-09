@@ -6,6 +6,9 @@ namespace Siganushka\RequestTokenBundle\Generator;
 
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * Uuid token generator.
+ */
 class UuidTokenGenerator implements RequestTokenGeneratorInterface
 {
     public function __construct()

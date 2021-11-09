@@ -10,7 +10,6 @@ use Siganushka\RequestTokenBundle\Generator\RandomBytesTokenGenerator;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Siganushka\RequestTokenBundle\Generator\TimestampTokenGenerator;
 use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
-use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SiganushkaRequestTokenExtensionTest extends TestCase
@@ -44,31 +43,23 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
 
         $container = $this->createContainerWithConfigs([$config]);
 
-        static::assertTrue($container->hasAlias(RandomBytesTokenGenerator::class));
-        static::assertTrue($container->hasAlias(TimestampTokenGenerator::class));
-        static::assertTrue($container->hasAlias(UuidTokenGenerator::class));
-        static::assertTrue($container->hasAlias(UuidTokenGenerator::class));
-        static::assertTrue($container->hasAlias(RequestTokenGeneratorInterface::class));
         static::assertTrue($container->hasAlias('siganushka_request_token.generator'));
-
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.random_bytes'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.timestamp'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.uniqid'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.generator.uuid'));
         static::assertTrue($container->hasDefinition('siganushka_request_token.listener.request_token'));
-        static::assertSame(class_exists(MonologBundle::class), $container->hasDefinition('siganushka_request_token.monolog.processor.request_token'));
+        static::assertTrue($container->hasDefinition('siganushka_request_token.monolog.processor.request_token'));
 
         $requestTokenListenerDef = $container->getDefinition('siganushka_request_token.listener.request_token');
         static::assertTrue($requestTokenListenerDef->hasTag('kernel.event_subscriber'));
         static::assertSame($config['token_generator'], (string) $requestTokenListenerDef->getArgument(0));
         static::assertSame($config['header_name'], $requestTokenListenerDef->getArgument(1));
 
-        if (class_exists(MonologBundle::class)) {
-            $requestTokenProcessorDef = $container->getDefinition('siganushka_request_token.monolog.processor.request_token');
-            static::assertTrue($requestTokenProcessorDef->hasTag('monolog.processor'));
-            static::assertSame('request_stack', (string) $requestTokenProcessorDef->getArgument(0));
-            static::assertSame($config['header_name'], $requestTokenProcessorDef->getArgument(1));
-        }
+        $requestTokenProcessorDef = $container->getDefinition('siganushka_request_token.monolog.processor.request_token');
+        static::assertTrue($requestTokenProcessorDef->hasTag('monolog.processor'));
+        static::assertSame('request_stack', (string) $requestTokenProcessorDef->getArgument(0));
+        static::assertSame($config['header_name'], $requestTokenProcessorDef->getArgument(1));
     }
 
     protected function createContainerWithConfigs(array $configs): ContainerBuilder
