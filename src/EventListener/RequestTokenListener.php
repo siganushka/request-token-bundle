@@ -59,7 +59,7 @@ class RequestTokenListener implements EventSubscriberInterface
             return $event->isMainRequest();
         }
 
-        // fallback symfony 4.x
+        // fallback symfony 5.2
         return $event->isMasterRequest();
     }
 }
