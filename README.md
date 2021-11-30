@@ -1,6 +1,6 @@
 # Request token bundle for symfony
 
-[![Build Status](https://travis-ci.org/siganushka/request-token-bundle.svg?branch=main)](https://travis-ci.org/siganushka/request-token-bundle)
+[![Build Status](https://github.com/siganushka/request-token-bundle/actions/workflows/ci.yaml/badge.svg)](https://github.com/siganushka/request-token-bundle/actions/workflows/ci.yaml)
 [![Latest Stable Version](https://poser.pugx.org/siganushka/request-token-bundle/v/stable)](https://packagist.org/packages/siganushka/request-token-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/siganushka/request-token-bundle/v/unstable)](https://packagist.org/packages/siganushka/request-token-bundle)
 [![License](https://poser.pugx.org/siganushka/request-token-bundle/license)](https://packagist.org/packages/siganushka/request-token-bundle)
