@@ -9,7 +9,7 @@ use Siganushka\RequestTokenBundle\Generator\RandomBytesTokenGenerator;
 
 class RandomBytesTokenGeneratorTest extends TestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $generator = new RandomBytesTokenGenerator();
         $token = $generator->generate();

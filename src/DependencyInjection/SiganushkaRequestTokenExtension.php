@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class SiganushkaRequestTokenExtension extends Extension
 {
+    /**
+     * @param array<mixed> $configs
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new PhpFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));

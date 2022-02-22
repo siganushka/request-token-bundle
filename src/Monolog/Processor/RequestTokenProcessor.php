@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestTokenProcessor
 {
-    protected $requestStack;
-    protected $headerName;
+    protected RequestStack $requestStack;
+    protected string $headerName;
 
     public function __construct(RequestStack $requestStack, string $headerName)
     {
@@ -17,6 +17,11 @@ class RequestTokenProcessor
         $this->headerName = $headerName;
     }
 
+    /**
+     * @param array<string, array<mixed>> $record
+     *
+     * @return array<mixed>
+     */
     public function __invoke(array $record): array
     {
         $request = $this->requestStack->getCurrentRequest();

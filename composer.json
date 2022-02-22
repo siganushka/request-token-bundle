@@ -10,13 +10,13 @@
         }
     ],
     "require": {
-        "php": ">=7.2.5",
-        "symfony/framework-bundle": "^5.2|^6.0"
+        "php": ">=7.4",
+        "symfony/framework-bundle": "^5.4|^6.0"
     },
     "require-dev": {
         "symfony/monolog-bundle": "^3.5",
-        "symfony/phpunit-bridge": "^5.2|^6.0",
-        "symfony/uid": "^5.2|^6.0"
+        "symfony/phpunit-bridge": "^5.4|^6.0",
+        "symfony/uid": "^5.4|^6.0"
     },
     "autoload": {
         "psr-4": {

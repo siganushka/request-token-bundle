@@ -9,7 +9,7 @@ use Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator;
 
 class UniqidTokenGeneratorTest extends TestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $generator = new UniqidTokenGenerator();
         $token = $generator->generate();

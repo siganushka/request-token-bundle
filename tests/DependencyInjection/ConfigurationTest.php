@@ -18,8 +18,8 @@ use Symfony\Component\Config\Definition\Processor;
  */
 final class ConfigurationTest extends TestCase
 {
-    private $configuration;
-    private $processor;
+    private ConfigurationInterface $configuration;
+    private Processor $processor;
 
     protected function setUp(): void
     {

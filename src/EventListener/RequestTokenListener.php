@@ -6,14 +6,13 @@ namespace Siganushka\RequestTokenBundle\EventListener;
 
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class RequestTokenListener implements EventSubscriberInterface
 {
-    protected $tokenGenerator;
-    protected $headerName;
+    protected RequestTokenGeneratorInterface $tokenGenerator;
+    protected string $headerName;
 
     public function __construct(RequestTokenGeneratorInterface $tokenGenerator, string $headerName)
     {
@@ -21,9 +20,9 @@ class RequestTokenListener implements EventSubscriberInterface
         $this->headerName = $headerName;
     }
 
-    public function onRequest(RequestEvent $event)
+    public function onRequest(RequestEvent $event): void
     {
-        if (!$this->isMainRequest($event)) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -33,9 +32,9 @@ class RequestTokenListener implements EventSubscriberInterface
         }
     }
 
-    public function onResponse(ResponseEvent $event)
+    public function onResponse(ResponseEvent $event): void
     {
-        if (!$this->isMainRequest($event)) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -51,15 +50,5 @@ class RequestTokenListener implements EventSubscriberInterface
             RequestEvent::class => ['onRequest', 4096],
             ResponseEvent::class => ['onResponse', 4096],
         ];
-    }
-
-    private function isMainRequest(KernelEvent $event): bool
-    {
-        if (method_exists($event, 'isMainRequest')) {
-            return $event->isMainRequest();
-        }
-
-        // fallback symfony 5.2
-        return $event->isMasterRequest();
     }
 }

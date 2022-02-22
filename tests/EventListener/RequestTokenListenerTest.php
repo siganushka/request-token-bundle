@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestTokenListenerTest extends TestCase
 {
-    public function testRequestToken()
+    public function testRequestToken(): void
     {
         $headerName = 'bar';
 

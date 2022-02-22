@@ -9,7 +9,7 @@ namespace Siganushka\RequestTokenBundle\Generator;
  */
 class RandomBytesTokenGenerator implements RequestTokenGeneratorInterface
 {
-    private $entropy;
+    private int $entropy;
 
     public function __construct(int $entropy = 128)
     {
@@ -18,6 +18,6 @@ class RandomBytesTokenGenerator implements RequestTokenGeneratorInterface
 
     public function generate(): string
     {
-        return bin2hex(random_bytes($this->entropy / 8));
+        return bin2hex(random_bytes((int) ($this->entropy / 8)));
     }
 }

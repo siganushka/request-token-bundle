@@ -6,6 +6,9 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RandomBytesTokenGenerator;
+use Siganushka\RequestTokenBundle\Generator\TimestampTokenGenerator;
+use Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator;
+use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
 use Siganushka\RequestTokenBundle\Monolog\Processor\RequestTokenProcessor;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 

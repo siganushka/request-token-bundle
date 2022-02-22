@@ -9,7 +9,7 @@ use Siganushka\RequestTokenBundle\Generator\TimestampTokenGenerator;
 
 class TimestampTokenGeneratorTest extends TestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $generator = new TimestampTokenGenerator();
         $token = $generator->generate();

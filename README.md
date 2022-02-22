@@ -12,7 +12,7 @@ see: [What is the X-REQUEST-ID http header](https://stackoverflow.com/questions/
 ### Installation
 
 ```bash
-$ composer require siganushka/request-token-bundle
+$ composer require siganushka/request-token-bundle:dev-main
 ```
 
 ### Configuration

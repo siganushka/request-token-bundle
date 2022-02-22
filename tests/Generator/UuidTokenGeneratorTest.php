@@ -9,7 +9,7 @@ use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
 
 class UuidTokenGeneratorTest extends TestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $generator = new UuidTokenGenerator();
         $token = $generator->generate();
