@@ -62,7 +62,7 @@ final class ConfigurationTest extends TestCase
         ]);
 
         static::assertEquals($config, [
-            'enabled' => true,
+            'enabled' => false,
             'header_name' => 'foo',
             'token_generator' => FooBarGenerator::class,
         ]);

@@ -18,9 +18,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
-            ->info('request token configuration')
-            ->canBeEnabled()
             ->children()
+                ->booleanNode('enabled')
+                    ->defaultFalse()
+                ->end()
                 ->scalarNode('header_name')
                     ->cannotBeEmpty()
                     ->defaultValue('X-Request-Id')
