@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Siganushka\RequestTokenBundle\DependencyInjection;
 
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,13 +14,13 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('siganushka_request_token');
+        /** @var ArrayNodeDefinition */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
+            ->info('request token configuration')
+            ->canBeEnabled()
             ->children()
-                ->booleanNode('enabled')
-                    ->defaultFalse()
-                ->end()
                 ->scalarNode('header_name')
                     ->cannotBeEmpty()
                     ->defaultValue('X-Request-Id')

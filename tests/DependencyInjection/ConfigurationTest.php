@@ -12,10 +12,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
-/**
- * @internal
- * @coversNothing
- */
 final class ConfigurationTest extends TestCase
 {
     private ConfigurationInterface $configuration;
@@ -30,12 +26,10 @@ final class ConfigurationTest extends TestCase
     public function testDefaultConfig(): void
     {
         $treeBuilder = $this->configuration->getConfigTreeBuilder();
-
         static::assertInstanceOf(ConfigurationInterface::class, $this->configuration);
         static::assertInstanceOf(TreeBuilder::class, $treeBuilder);
 
         $config = $this->processor->processConfiguration($this->configuration, []);
-
         static::assertEquals($config, [
             'enabled' => false,
             'header_name' => 'X-Request-Id',
@@ -68,7 +62,7 @@ final class ConfigurationTest extends TestCase
         ]);
 
         static::assertEquals($config, [
-            'enabled' => false,
+            'enabled' => true,
             'header_name' => 'foo',
             'token_generator' => FooBarGenerator::class,
         ]);
