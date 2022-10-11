@@ -18,8 +18,11 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
-            ->canBeEnabled()
+            // ->canBeEnabled()
             ->children()
+                ->booleanNode('enabled')
+                    ->defaultFalse()
+                ->end()
                 ->scalarNode('header_name')
                     ->cannotBeEmpty()
                     ->defaultValue('X-Request-Id')

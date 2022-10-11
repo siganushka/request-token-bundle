@@ -36,13 +36,13 @@ final class ConfigurationTest extends TestCase
     {
         $config = $this->processor->processConfiguration($this->configuration, [
             [
-                'header_name' => 'request-token',
+                'enabled' => true,
             ],
         ]);
 
         static::assertEquals([
             'enabled' => true,
-            'header_name' => 'request-token',
+            'header_name' => 'X-Request-Id',
             'token_generator' => 'siganushka_request_token.generator.random_bytes',
         ], $config);
     }
@@ -51,6 +51,7 @@ final class ConfigurationTest extends TestCase
     {
         $config = $this->processor->processConfiguration($this->configuration, [
             [
+                'enabled' => true,
                 'header_name' => 'foo',
                 'token_generator' => FooBarGenerator::class,
             ],

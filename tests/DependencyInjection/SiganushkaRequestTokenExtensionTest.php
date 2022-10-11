@@ -35,6 +35,7 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
     public function testLoadCustomConfig(): void
     {
         $config = [
+            'enabled' => true,
             'header_name' => 'asdf',
             'token_generator' => FooBarBazGenerator::class,
         ];
