@@ -12,17 +12,14 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class SiganushkaRequestTokenExtension extends Extension
 {
-    /**
-     * @param array<mixed> $configs
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new PhpFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
 
-        $configuration = new Configuration();
+        $configuration = $this->getConfiguration([], $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        if ($config['enabled']) {
+        if ($this->isConfigEnabled($container, $config)) {
             $container->setParameter('siganushka_request_token.header_name', $config['header_name']);
 
             $container->setAlias('siganushka_request_token.generator', $config['token_generator']);

@@ -12,7 +12,7 @@ use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
 use Siganushka\RequestTokenBundle\Monolog\Processor\RequestTokenProcessor;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 
-return static function (ContainerConfigurator $container) {
+return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('siganushka_request_token.generator.random_bytes', RandomBytesTokenGenerator::class)
         ->set('siganushka_request_token.generator.timestamp', TimestampTokenGenerator::class)

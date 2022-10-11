@@ -24,13 +24,9 @@ class RequestTokenListenerTest extends TestCase
 
         $response = new Response();
 
-        $requestType = \defined(sprintf('%s::MAIN_REQUEST', HttpKernelInterface::class))
-            ? HttpKernelInterface::MAIN_REQUEST
-            : HttpKernelInterface::MASTER_REQUEST;
-
         $httpKernel = $this->createMock(HttpKernelInterface::class);
-        $requestEvent = new RequestEvent($httpKernel, $request, $requestType);
-        $responseEvent = new ResponseEvent($httpKernel, $request, $requestType, $response);
+        $requestEvent = new RequestEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $responseEvent = new ResponseEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
 
         $tokenGenerator = $this->getMockForAbstractClass(RequestTokenGeneratorInterface::class);
         $tokenGenerator->expects(static::any())

@@ -18,6 +18,6 @@ class RandomBytesTokenGenerator implements RequestTokenGeneratorInterface
 
     public function generate(): string
     {
-        return bin2hex(random_bytes((int) ($this->entropy / 8)));
+        return bin2hex(random_bytes($this->entropy / 8));
     }
 }

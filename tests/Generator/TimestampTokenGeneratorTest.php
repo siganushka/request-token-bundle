@@ -14,7 +14,6 @@ class TimestampTokenGeneratorTest extends TestCase
         $generator = new TimestampTokenGenerator();
         $token = $generator->generate();
 
-        static::assertIsString($token);
         static::assertNotEmpty($token);
     }
 }

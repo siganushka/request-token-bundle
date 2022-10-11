@@ -14,7 +14,6 @@ class RandomBytesTokenGeneratorTest extends TestCase
         $generator = new RandomBytesTokenGenerator();
         $token = $generator->generate();
 
-        static::assertIsString($token);
         static::assertNotEmpty($token);
     }
 }

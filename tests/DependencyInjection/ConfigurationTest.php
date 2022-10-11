@@ -7,7 +7,6 @@ namespace Siganushka\RequestTokenBundle\Tests\DependencyInjection;
 use PHPUnit\Framework\TestCase;
 use Siganushka\RequestTokenBundle\DependencyInjection\Configuration;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -25,31 +24,27 @@ final class ConfigurationTest extends TestCase
 
     public function testDefaultConfig(): void
     {
-        $treeBuilder = $this->configuration->getConfigTreeBuilder();
-        static::assertInstanceOf(ConfigurationInterface::class, $this->configuration);
-        static::assertInstanceOf(TreeBuilder::class, $treeBuilder);
-
         $config = $this->processor->processConfiguration($this->configuration, []);
-        static::assertEquals($config, [
+        static::assertEquals([
             'enabled' => false,
             'header_name' => 'X-Request-Id',
             'token_generator' => 'siganushka_request_token.generator.random_bytes',
-        ]);
+        ], $config);
     }
 
     public function testEnableConfig(): void
     {
         $config = $this->processor->processConfiguration($this->configuration, [
             [
-                'enabled' => true,
+                'header_name' => 'request-token',
             ],
         ]);
 
-        static::assertEquals($config, [
+        static::assertEquals([
             'enabled' => true,
-            'header_name' => 'X-Request-Id',
+            'header_name' => 'request-token',
             'token_generator' => 'siganushka_request_token.generator.random_bytes',
-        ]);
+        ], $config);
     }
 
     public function testCustomNameConfig(): void
@@ -61,11 +56,11 @@ final class ConfigurationTest extends TestCase
             ],
         ]);
 
-        static::assertEquals($config, [
-            'enabled' => false,
+        static::assertEquals([
+            'enabled' => true,
             'header_name' => 'foo',
             'token_generator' => FooBarGenerator::class,
-        ]);
+        ], $config);
     }
 
     public function testInvalidHeaderNameException(): void

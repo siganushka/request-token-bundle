@@ -18,10 +18,8 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
+            ->canBeEnabled()
             ->children()
-                ->booleanNode('enabled')
-                    ->defaultFalse()
-                ->end()
                 ->scalarNode('header_name')
                     ->cannotBeEmpty()
                     ->defaultValue('X-Request-Id')
@@ -30,12 +28,12 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue('siganushka_request_token.generator.random_bytes')
                     ->validate()
-                    ->ifTrue(function ($tokenGeneratorService) {
-                        if (!class_exists($tokenGeneratorService)) {
+                    ->ifTrue(function ($v) {
+                        if (!class_exists($v)) {
                             return false;
                         }
 
-                        return !(new \ReflectionClass($tokenGeneratorService))->implementsInterface(RequestTokenGeneratorInterface::class);
+                        return !(new \ReflectionClass($v))->implementsInterface(RequestTokenGeneratorInterface::class);
                     })
                     ->thenInvalid('The %s class must implement '.RequestTokenGeneratorInterface::class.' for using the "token_generator".')
                 ->end()

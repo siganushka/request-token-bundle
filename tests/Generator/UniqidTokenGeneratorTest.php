@@ -14,7 +14,6 @@ class UniqidTokenGeneratorTest extends TestCase
         $generator = new UniqidTokenGenerator();
         $token = $generator->generate();
 
-        static::assertIsString($token);
         static::assertNotEmpty($token);
     }
 }

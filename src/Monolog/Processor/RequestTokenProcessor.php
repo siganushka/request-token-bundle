@@ -17,11 +17,6 @@ class RequestTokenProcessor
         $this->headerName = $headerName;
     }
 
-    /**
-     * @param array<string, array<mixed>> $record
-     *
-     * @return array<mixed>
-     */
     public function __invoke(array $record): array
     {
         $request = $this->requestStack->getCurrentRequest();
