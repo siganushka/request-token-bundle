@@ -7,6 +7,7 @@ namespace Siganushka\RequestTokenBundle\Tests\DependencyInjection;
 use PHPUnit\Framework\TestCase;
 use Siganushka\RequestTokenBundle\DependencyInjection\Configuration;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
+use Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -28,7 +29,7 @@ final class ConfigurationTest extends TestCase
         static::assertEquals([
             'enabled' => false,
             'header_name' => 'X-Request-Id',
-            'token_generator' => 'siganushka_request_token.generator.random_bytes',
+            'token_generator' => UniqidTokenGenerator::class,
         ], $config);
     }
 
@@ -43,7 +44,7 @@ final class ConfigurationTest extends TestCase
         static::assertEquals([
             'enabled' => true,
             'header_name' => 'X-Request-Id',
-            'token_generator' => 'siganushka_request_token.generator.random_bytes',
+            'token_generator' => UniqidTokenGenerator::class,
         ], $config);
     }
 

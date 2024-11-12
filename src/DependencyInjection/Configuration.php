@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Siganushka\RequestTokenBundle\DependencyInjection;
 
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
+use Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -29,16 +30,11 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('token_generator')
                     ->cannotBeEmpty()
-                    ->defaultValue('siganushka_request_token.generator.random_bytes')
+                    ->defaultValue(UniqidTokenGenerator::class)
                     ->validate()
-                    ->ifTrue(function ($v) {
-                        if (!class_exists($v)) {
-                            return false;
-                        }
-
-                        return !(new \ReflectionClass($v))->implementsInterface(RequestTokenGeneratorInterface::class);
-                    })
-                    ->thenInvalid('The %s class must implement '.RequestTokenGeneratorInterface::class.' for using the "token_generator".')
+                        ->ifTrue(static fn (mixed $v): bool => \is_string($v) && !is_a($v, RequestTokenGeneratorInterface::class, true))
+                        ->thenInvalid('The value must be instanceof '.RequestTokenGeneratorInterface::class.', %s given.')
+                    ->end()
                 ->end()
             ->end()
         ;

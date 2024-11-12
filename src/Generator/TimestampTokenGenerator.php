@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Siganushka\RequestTokenBundle\Generator;
 
-/**
- * Timestamp token generator.
- */
 class TimestampTokenGenerator implements RequestTokenGeneratorInterface
 {
     public function generate(): string
     {
-        return str_pad((string) microtime(true), 15, '0');
+        $microtime = microtime();
+
+        return \sprintf('%10s%06s', substr($microtime, -10), substr($microtime, 2, 6));
     }
 }

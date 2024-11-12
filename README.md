@@ -23,5 +23,5 @@ $ composer require siganushka/request-token-bundle
 siganushka_request_token:
     enabled: true
     header_name: X-Request-Id
-    token_generator: siganushka_request_token.generator.random_bytes
+    token_generator: Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator
 ```

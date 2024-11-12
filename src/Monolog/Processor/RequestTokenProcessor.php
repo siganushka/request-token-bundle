@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace Siganushka\RequestTokenBundle\Monolog\Processor;
 
+use Monolog\LogRecord;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @see https://symfony.com/doc/current/logging/processors.html
+ */
 class RequestTokenProcessor
 {
-    protected RequestStack $requestStack;
-    protected string $headerName;
-
-    public function __construct(RequestStack $requestStack, string $headerName)
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly string $headerName)
     {
-        $this->requestStack = $requestStack;
-        $this->headerName = $headerName;
     }
 
-    public function __invoke(array $record): array
+    public function __invoke(LogRecord $record): LogRecord
     {
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request && $request->headers->has($this->headerName)) {
-            $record['extra'][$this->headerName] = $request->headers->get($this->headerName);
+            $record->extra[$this->headerName] = $request->headers->get($this->headerName);
         }
 
         return $record;

@@ -11,13 +11,10 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class RequestTokenListener implements EventSubscriberInterface
 {
-    protected RequestTokenGeneratorInterface $tokenGenerator;
-    protected string $headerName;
-
-    public function __construct(RequestTokenGeneratorInterface $tokenGenerator, string $headerName)
+    public function __construct(
+        private readonly RequestTokenGeneratorInterface $tokenGenerator,
+        private readonly string $headerName)
     {
-        $this->tokenGenerator = $tokenGenerator;
-        $this->headerName = $headerName;
     }
 
     public function onRequest(RequestEvent $event): void
@@ -47,8 +44,8 @@ class RequestTokenListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            RequestEvent::class => ['onRequest', 4096],
-            ResponseEvent::class => ['onResponse', 4096],
+            RequestEvent::class => ['onRequest', 128],
+            ResponseEvent::class => ['onResponse', 128],
         ];
     }
 }
