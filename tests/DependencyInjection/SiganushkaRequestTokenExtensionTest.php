@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Siganushka\RequestTokenBundle\DependencyInjection\SiganushkaRequestTokenExtension;
 use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
-use Siganushka\RequestTokenBundle\Generator\TimestampTokenGenerator;
 use Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator;
 use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
 use Siganushka\RequestTokenBundle\Monolog\Processor\RequestTokenProcessor;
@@ -23,7 +22,6 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
 
         static::assertFalse($container->hasAlias(RequestTokenGeneratorInterface::class));
         static::assertFalse($container->hasDefinition(RequestTokenListener::class));
-        static::assertFalse($container->hasDefinition(TimestampTokenGenerator::class));
         static::assertFalse($container->hasDefinition(UniqidTokenGenerator::class));
         static::assertFalse($container->hasDefinition(UuidTokenGenerator::class));
         static::assertFalse($container->hasDefinition(RequestTokenProcessor::class));
@@ -41,7 +39,6 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
 
         static::assertTrue($container->hasAlias(RequestTokenGeneratorInterface::class));
         static::assertTrue($container->hasDefinition(RequestTokenListener::class));
-        static::assertTrue($container->hasDefinition(TimestampTokenGenerator::class));
         static::assertTrue($container->hasDefinition(UniqidTokenGenerator::class));
         static::assertTrue($container->hasDefinition(UuidTokenGenerator::class));
         static::assertTrue($container->hasDefinition(RequestTokenProcessor::class));

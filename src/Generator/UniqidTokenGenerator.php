@@ -8,6 +8,6 @@ class UniqidTokenGenerator implements RequestTokenGeneratorInterface
 {
     public function generate(): string
     {
-        return uniqid();
+        return uniqid('', true);
     }
 }
