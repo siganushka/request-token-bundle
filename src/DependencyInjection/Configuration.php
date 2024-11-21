@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue(UniqidTokenGenerator::class)
                     ->validate()
-                        ->ifTrue(static fn (mixed $v): bool => \is_string($v) && !is_a($v, RequestTokenGeneratorInterface::class, true))
+                        ->ifTrue(static fn (mixed $v): bool => \is_string($v) && !is_subclass_of($v, RequestTokenGeneratorInterface::class, true))
                         ->thenInvalid('The value must be instanceof '.RequestTokenGeneratorInterface::class.', %s given.')
                     ->end()
                 ->end()
