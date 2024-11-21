@@ -29,12 +29,12 @@ class SiganushkaRequestTokenExtension extends Extension
 
             $container->setAlias(RequestTokenGeneratorInterface::class, $config['token_generator']);
 
-            $requestTokenListenerDef = $container->findDefinition(RequestTokenListener::class);
-            $requestTokenListenerDef->setArgument('$headerName', $config['header_name']);
+            $requestTokenListener = $container->findDefinition(RequestTokenListener::class);
+            $requestTokenListener->setArgument('$headerName', $config['header_name']);
 
-            $requestTokenProcessorDef = $container->findDefinition(RequestTokenProcessor::class);
-            $requestTokenProcessorDef->setArgument('$headerName', $config['header_name']);
-            $requestTokenProcessorDef->addTag('monolog.processor');
+            $requestTokenProcessor = $container->findDefinition(RequestTokenProcessor::class);
+            $requestTokenProcessor->setArgument('$headerName', $config['header_name']);
+            $requestTokenProcessor->addTag('monolog.processor');
 
             if (!class_exists(Uuid::class)) {
                 $container->removeDefinition(UuidTokenGenerator::class);

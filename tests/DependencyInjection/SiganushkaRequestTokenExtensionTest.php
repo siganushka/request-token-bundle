@@ -43,12 +43,12 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         static::assertTrue($container->hasDefinition(UuidTokenGenerator::class));
         static::assertTrue($container->hasDefinition(RequestTokenProcessor::class));
 
-        $requestTokenListenerDef = $container->getDefinition(RequestTokenListener::class);
-        static::assertSame($config['header_name'], $requestTokenListenerDef->getArgument('$headerName'));
+        $requestTokenListener = $container->getDefinition(RequestTokenListener::class);
+        static::assertSame($config['header_name'], $requestTokenListener->getArgument('$headerName'));
 
-        $requestTokenProcessorDef = $container->getDefinition(RequestTokenProcessor::class);
-        static::assertTrue($requestTokenProcessorDef->hasTag('monolog.processor'));
-        static::assertSame($config['header_name'], $requestTokenProcessorDef->getArgument('$headerName'));
+        $requestTokenProcessor = $container->getDefinition(RequestTokenProcessor::class);
+        static::assertTrue($requestTokenProcessor->hasTag('monolog.processor'));
+        static::assertSame($config['header_name'], $requestTokenProcessor->getArgument('$headerName'));
     }
 
     private function createContainerWithConfig(array $config = []): ContainerBuilder
