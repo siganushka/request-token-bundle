@@ -16,7 +16,6 @@
         "symfony/framework-bundle": "^6.4|^7.0"
     },
     "require-dev": {
-        "symfony/monolog-bundle": "^3.0",
         "monolog/monolog": "^2.4|^3.0",
         "symfony/uid": "^6.4|^7.0"
     },

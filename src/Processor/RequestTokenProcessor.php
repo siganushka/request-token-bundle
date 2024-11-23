@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Siganushka\RequestTokenBundle\Monolog\Processor;
+namespace Siganushka\RequestTokenBundle\Processor;
 
 use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @see https://symfony.com/doc/current/logging/processors.html
  */
-class RequestTokenProcessor
+class RequestTokenProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly RequestStack $requestStack,

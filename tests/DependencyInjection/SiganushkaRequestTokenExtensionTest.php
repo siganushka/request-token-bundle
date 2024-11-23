@@ -10,7 +10,7 @@ use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Siganushka\RequestTokenBundle\Generator\UniqidTokenGenerator;
 use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
-use Siganushka\RequestTokenBundle\Monolog\Processor\RequestTokenProcessor;
+use Siganushka\RequestTokenBundle\Processor\RequestTokenProcessor;
 use Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -47,7 +47,6 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         static::assertSame($config['header_name'], $requestTokenListener->getArgument('$headerName'));
 
         $requestTokenProcessor = $container->getDefinition(RequestTokenProcessor::class);
-        static::assertTrue($requestTokenProcessor->hasTag('monolog.processor'));
         static::assertSame($config['header_name'], $requestTokenProcessor->getArgument('$headerName'));
     }
 

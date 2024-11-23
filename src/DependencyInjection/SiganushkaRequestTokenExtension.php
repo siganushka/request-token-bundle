@@ -7,8 +7,7 @@ namespace Siganushka\RequestTokenBundle\DependencyInjection;
 use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
-use Siganushka\RequestTokenBundle\Monolog\Processor\RequestTokenProcessor;
-use Symfony\Bundle\MonologBundle\MonologBundle;
+use Siganushka\RequestTokenBundle\Processor\RequestTokenProcessor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -34,14 +33,9 @@ class SiganushkaRequestTokenExtension extends Extension
 
             $requestTokenProcessor = $container->findDefinition(RequestTokenProcessor::class);
             $requestTokenProcessor->setArgument('$headerName', $config['header_name']);
-            $requestTokenProcessor->addTag('monolog.processor');
 
             if (!class_exists(Uuid::class)) {
                 $container->removeDefinition(UuidTokenGenerator::class);
-            }
-
-            if (!class_exists(MonologBundle::class)) {
-                $container->removeDefinition(RequestTokenProcessor::class);
             }
         }
     }
