@@ -13,7 +13,7 @@ class UuidTokenGenerator implements RequestTokenGeneratorInterface
 {
     private UuidFactory|NameBasedUuidFactory|RandomBasedUuidFactory|TimeBasedUuidFactory $factory;
 
-    public function __construct(UuidFactory $factory = null)
+    public function __construct(?UuidFactory $factory = null)
     {
         $this->factory = $factory ?? new UuidFactory();
     }
