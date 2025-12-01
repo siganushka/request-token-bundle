@@ -25,7 +25,6 @@ class RequestTokenListenerTest extends TestCase
 
         $response = new Response();
 
-        /** @var HttpKernelInterface */
         $httpKernel = $this->createMock(HttpKernelInterface::class);
         $requestEvent = new RequestEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST);
         $responseEvent = new ResponseEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
