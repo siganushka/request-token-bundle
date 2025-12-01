@@ -4,8 +4,10 @@ parameters:
         - config
         - src
         - tests
+        - translations
     bootstrapFiles:
         - tools/vendor/bin/.phpunit/phpunit/vendor/autoload.php
     ignoreErrors:
         - '#no value type specified in iterable type array#'
-        - { message: '#Node\(\) on an unknown class#', path: src/DependencyInjection/Configuration.php }
+        - '#no value type specified in iterable type iterable#'
+        - { message: '#contains generic type#', path: src/DependencyInjection/Configuration.php }
