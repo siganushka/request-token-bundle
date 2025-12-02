@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Siganushka\RequestTokenBundle\Tests\EventListener;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
@@ -29,7 +28,6 @@ class RequestTokenListenerTest extends TestCase
         $requestEvent = new RequestEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST);
         $responseEvent = new ResponseEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
 
-        /** @var MockObject&RequestTokenGeneratorInterface */
         $tokenGenerator = $this->getMockForAbstractClass(RequestTokenGeneratorInterface::class);
         $tokenGenerator->expects(static::any())
             ->method('generate')
