@@ -28,7 +28,7 @@ class RequestTokenListenerTest extends TestCase
         $requestEvent = new RequestEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST);
         $responseEvent = new ResponseEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
 
-        $tokenGenerator = $this->getMockForAbstractClass(RequestTokenGeneratorInterface::class);
+        $tokenGenerator = $this->createMock(RequestTokenGeneratorInterface::class);
         $tokenGenerator->expects(static::any())
             ->method('generate')
             ->willReturn('789')
