@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Siganushka\RequestTokenBundle\DependencyInjection;
 
+use Monolog\Processor\ProcessorInterface;
 use Siganushka\RequestTokenBundle\EventListener\RequestTokenListener;
 use Siganushka\RequestTokenBundle\Generator\RequestTokenGeneratorInterface;
 use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
@@ -36,6 +37,10 @@ class SiganushkaRequestTokenExtension extends Extension
 
             if (!class_exists(Uuid::class)) {
                 $container->removeDefinition(UuidTokenGenerator::class);
+            }
+
+            if (!interface_exists(ProcessorInterface::class)) {
+                $container->removeDefinition(RequestTokenProcessor::class);
             }
         }
     }
