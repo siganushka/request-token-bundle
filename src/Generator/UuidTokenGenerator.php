@@ -8,15 +8,12 @@ use Symfony\Component\Uid\Factory\UuidFactory;
 
 class UuidTokenGenerator implements RequestTokenGeneratorInterface
 {
-    private UuidFactory $factory;
-
-    public function __construct(?UuidFactory $factory = null)
+    public function __construct(private readonly UuidFactory $factory = new UuidFactory())
     {
-        $this->factory = $factory ?? new UuidFactory();
     }
 
     public function generate(): string
     {
-        return (string) $this->factory->create();
+        return $this->factory->create()->__toString();
     }
 }
