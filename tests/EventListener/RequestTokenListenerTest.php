@@ -51,4 +51,45 @@ class RequestTokenListenerTest extends TestCase
         static::assertTrue($response->headers->has($headerName));
         static::assertSame('789', $response->headers->get($headerName));
     }
+
+    public function testSubRequestIsIgnored(): void
+    {
+        $headerName = 'X-Request-Id';
+
+        $request = new Request();
+        $response = new Response();
+        $httpKernel = $this->createMock(HttpKernelInterface::class);
+
+        $tokenGenerator = $this->createMock(RequestTokenGeneratorInterface::class);
+        $tokenGenerator->expects(static::never())->method('generate');
+
+        $listener = new RequestTokenListener($tokenGenerator, $headerName);
+        $listener->onRequest(new RequestEvent($httpKernel, $request, HttpKernelInterface::SUB_REQUEST));
+        $listener->onResponse(new ResponseEvent($httpKernel, $request, HttpKernelInterface::SUB_REQUEST, $response));
+
+        static::assertFalse($request->headers->has($headerName));
+        static::assertFalse($response->headers->has($headerName));
+    }
+
+    public function testResponseWithoutRequestToken(): void
+    {
+        $headerName = 'X-Request-Id';
+
+        $request = new Request();
+        $response = new Response();
+        $httpKernel = $this->createMock(HttpKernelInterface::class);
+
+        $listener = new RequestTokenListener($this->createMock(RequestTokenGeneratorInterface::class), $headerName);
+        $listener->onResponse(new ResponseEvent($httpKernel, $request, HttpKernelInterface::MAIN_REQUEST, $response));
+
+        static::assertFalse($response->headers->has($headerName));
+    }
+
+    public function testGetSubscribedEvents(): void
+    {
+        static::assertSame([
+            RequestEvent::class => ['onRequest', 128],
+            ResponseEvent::class => ['onResponse', 128],
+        ], RequestTokenListener::getSubscribedEvents());
+    }
 }

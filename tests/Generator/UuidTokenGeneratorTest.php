@@ -6,6 +6,7 @@ namespace Siganushka\RequestTokenBundle\Tests\Generator;
 
 use PHPUnit\Framework\TestCase;
 use Siganushka\RequestTokenBundle\Generator\UuidTokenGenerator;
+use Symfony\Component\Uid\Uuid;
 
 class UuidTokenGeneratorTest extends TestCase
 {
@@ -15,5 +16,6 @@ class UuidTokenGeneratorTest extends TestCase
         $token = $generator->generate();
 
         static::assertNotEmpty($token);
+        static::assertTrue(Uuid::isValid($token));
     }
 }

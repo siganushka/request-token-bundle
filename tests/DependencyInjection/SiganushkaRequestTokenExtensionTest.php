@@ -38,6 +38,7 @@ class SiganushkaRequestTokenExtensionTest extends TestCase
         $container = $this->createContainerWithConfig($config);
 
         static::assertTrue($container->hasAlias(RequestTokenGeneratorInterface::class));
+        static::assertSame(FooBarBazGenerator::class, (string) $container->getAlias(RequestTokenGeneratorInterface::class));
         static::assertTrue($container->hasDefinition(RequestTokenListener::class));
         static::assertTrue($container->hasDefinition(UniqidTokenGenerator::class));
         static::assertTrue($container->hasDefinition(UuidTokenGenerator::class));
